@@ -8,5 +8,5 @@ run:
 	go run main.go taptracker.go
 
 test:
-	go test *_test.go
+	go test -v
 
