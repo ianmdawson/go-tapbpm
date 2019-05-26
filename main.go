@@ -41,12 +41,37 @@ func (trkr *tapTracker) bpmString() string {
 	return strconv.FormatFloat(trkr.bpm(), 'f', 2, 64)
 }
 
+func inputIsQuitKey(char rune, key keyboard.Key) bool {
+	if string(char) == "q" || key == keyboard.KeyCtrlC || key == keyboard.KeyEsc {
+		return true
+	}
+	return false
+}
+
+func handleInput(trkr *tapTracker, char rune, key keyboard.Key) (bool, error) {
+	if inputIsQuitKey(char, key) == true {
+		return false, nil
+	}
+
+	if string(char) == "r" {
+		fmt.Println("Resetting counts...")
+		trkr.reset()
+		return true, nil
+	}
+
+	t := time.Now()
+	trkr.tap(t)
+	println(trkr.numberOfTaps)
+	println("bpm: ", trkr.bpmString())
+	return true, nil
+}
+
 func main() {
-	fmt.Println("Simple Shell")
+	fmt.Println("Tap BPM, tap a letter to track bpm -- 'r' to reset -- 'q' or ESC to quit")
 	fmt.Println("---------------------")
 
 	trkr := tapTracker{nil, 0, 0}
-	fmt.Println("Press ESC to quit")
+
 	err := keyboard.Open()
 	if err != nil {
 		panic(err)
@@ -57,18 +82,16 @@ func main() {
 		char, key, err := keyboard.GetKey()
 		if err != nil {
 			panic(err)
-		} else if string(char) == "q" || char == '\x00' || key == keyboard.KeyEsc {
+		}
+
+		continueLoop, err := handleInput(&trkr, char, key)
+		if err != nil {
+			panic(err)
+		}
+
+		if continueLoop == false {
 			fmt.Println("Goodbye...")
 			break
-		} else if string(char) == "r" {
-			fmt.Println("Resetting counts...")
-			trkr.reset()
-		} else {
-			t := time.Now()
-			trkr.tap(t)
-			println(trkr.numberOfTaps)
-			bpm := strconv.FormatFloat(trkr.bpm(), 'f', 2, 64)
-			println("bpm: ", bpm)
 		}
 	}
 }
