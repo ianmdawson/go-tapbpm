@@ -14,22 +14,18 @@ func inputIsQuitKey(char rune, key keyboard.Key) bool {
 	return false
 }
 
-func handleInput(trkr *tapTracker, char rune, key keyboard.Key) (bool, error) {
-	if inputIsQuitKey(char, key) == true {
-		return false, nil
-	}
-
+func handleInput(trkr *tapTracker, char rune, key keyboard.Key) {
 	if string(char) == "r" {
 		fmt.Println("Resetting counts...")
 		trkr.reset()
-		return true, nil
+		return
 	}
 
 	t := time.Now()
 	trkr.tap(t)
 	println(trkr.numberOfTaps)
 	println("bpm: ", trkr.bpmString())
-	return true, nil
+	return
 }
 
 func main() {
@@ -50,14 +46,11 @@ func main() {
 			panic(err)
 		}
 
-		continueLoop, err := handleInput(&trkr, char, key)
-		if err != nil {
-			panic(err)
-		}
-
-		if continueLoop == false {
+		if inputIsQuitKey(char, key) == true {
 			fmt.Println("Goodbye...")
 			break
 		}
+
+		handleInput(&trkr, char, key)
 	}
 }
