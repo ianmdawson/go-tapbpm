@@ -80,12 +80,18 @@ func TestTapTrackerTap(t *testing.T) {
 		t.Errorf("Expected numberOfTaps to be %v, got: %v", newTime, trkr.trackedTime)
 	}
 
-	expectedNumberOfTaps := 1
+	expectedNumberOfTaps := 0
 	if trkr.numberOfTaps != expectedNumberOfTaps {
 		t.Errorf("Expected numberOfTaps to be %v, got: %v", expectedNumberOfTaps, trkr.numberOfTaps)
 	}
 
 	if trkr.totalTime < startingTotalTime {
 		t.Errorf("Expected startingTotalTime (%v) to less than ending total time %v", startingTotalTime, trkr.numberOfTaps)
+	}
+
+	trkr.tap(newTime)
+	expectedNumberOfTaps = 1
+	if trkr.numberOfTaps != expectedNumberOfTaps {
+		t.Errorf("Expected numberOfTaps to be %v, got: %v", expectedNumberOfTaps, trkr.numberOfTaps)
 	}
 }
