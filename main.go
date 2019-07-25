@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/eiannone/keyboard"
+	"github.com/gosuri/uilive"
 )
 
 func inputIsQuitKey(char rune, key keyboard.Key) bool {
@@ -14,24 +15,36 @@ func inputIsQuitKey(char rune, key keyboard.Key) bool {
 	return false
 }
 
-func handleInput(trkr *tapTracker, char rune, key keyboard.Key) {
+func handleInput(trkr *tapTracker, char rune, key keyboard.Key, writer *uilive.Writer) {
 	if string(char) == "r" {
-		fmt.Println("Resetting counts...")
+		fmt.Fprintln(writer, "Resetting counts...")
 		trkr.reset()
 		return
 	}
 
 	t := time.Now()
 	trkr.tap(t)
-	println(trkr.numberOfTaps)
-	println("bpm: ", trkr.bpmString())
+
+	if trkr.trackedTime != nil {
+		fmt.Fprintf(writer, "bpm: %v\n", trkr.bpmString())
+	} else {
+		fmt.Fprintf(writer, "First tap...\n")
+	}
+
 	return
+}
+
+func initTerminalWriter() *uilive.Writer {
+	writer := uilive.New()
+	// start listening for updates and render
+	writer.Start()
+	return writer
 }
 
 func main() {
 	fmt.Println("Tap BPM, tap a letter to track bpm -- 'r' to reset -- 'q' or ESC to quit")
-	fmt.Println("---------------------")
 
+	writer := initTerminalWriter()
 	trkr := tapTracker{nil, 0, 0}
 
 	err := keyboard.Open()
@@ -51,6 +64,8 @@ func main() {
 			break
 		}
 
-		handleInput(&trkr, char, key)
+		handleInput(&trkr, char, key, writer)
 	}
+
+	writer.Stop() // flush output and stop rendering
 }
