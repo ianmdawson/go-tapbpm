@@ -15,6 +15,7 @@ func TestTapTrackerBPM(t *testing.T) {
 		{time.Now(), time.Minute * 1, 60, float64(60)},
 		{time.Now(), time.Minute * 2, 120, float64(60)},
 		{time.Now(), time.Second * 30, 60, float64(120)},
+		{time.Now(), time.Second, 0, float64(0)},
 	}
 
 	for _, testCase := range testCases {

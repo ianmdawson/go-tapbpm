@@ -30,7 +30,7 @@ func (trkr *tapTracker) tap(newTime time.Time) {
 }
 
 func (trkr *tapTracker) bpm() float64 {
-	if trkr.trackedTime == nil {
+	if trkr.trackedTime == nil || trkr.numberOfTaps == 0 {
 		return float64(0)
 	}
 
