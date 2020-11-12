@@ -40,11 +40,12 @@ func handleInput(trkr *tapTracker, char rune, key keyboard.Key, writer *uilive.W
 }
 
 // initTerminalWriter initializes the terminal writer
+// Specifies RefreshInterval longer than the default of every Millisecond to
+// improve CPU performance (https://github.com/gosuri/uilive/issues/28)
 func initTerminalWriter() *uilive.Writer {
-	// TODO: return a writer that doesn't update as frequently as every millisecond to improve performance
 	writer := uilive.New()
-	// start listening for updates and render
-	writer.Start()
+	writer.RefreshInterval = time.Second / 60
+	writer.Start() // start listening for updates and render
 	return writer
 }
 
@@ -53,6 +54,7 @@ func main() {
 	fmt.Println("Tap BPM, tap a letter to track bpm -- 'r' to reset -- 'q' or ESC to quit")
 
 	writer := initTerminalWriter()
+	defer writer.Stop() // flush output and stop rendering eventually
 	trkr := tapTracker{nil, 0, 0}
 
 	err := keyboard.Open()
@@ -74,6 +76,4 @@ func main() {
 
 		handleInput(&trkr, char, key, writer)
 	}
-
-	writer.Stop() // flush output and stop rendering
 }
