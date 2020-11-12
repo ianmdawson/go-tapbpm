@@ -61,8 +61,8 @@ func TestTapTrackerReset(t *testing.T) {
 		t.Errorf("Expected lastTapTime to be nil, got: %v", trkr.lastTapTime)
 	}
 
-	if trkr.totalTime != 0 {
-		t.Errorf("Expected totalTime to be 0, got: %v", trkr.totalTime)
+	if trkr.totalDuration != 0 {
+		t.Errorf("Expected totalDuration to be 0, got: %v", trkr.totalDuration)
 	}
 
 	if trkr.numberOfTaps != 0 {
@@ -71,8 +71,8 @@ func TestTapTrackerReset(t *testing.T) {
 }
 
 func TestTapTrackerTap(t *testing.T) {
-	startingTotalTime := time.Nanosecond - 1
-	trkr := tapTracker{nil, startingTotalTime, 0}
+	startingTotalDuration := time.Nanosecond - 1
+	trkr := tapTracker{nil, startingTotalDuration, 0}
 
 	newTime := time.Now()
 	trkr.tap(newTime)
@@ -86,8 +86,8 @@ func TestTapTrackerTap(t *testing.T) {
 		t.Errorf("Expected numberOfTaps to be %v, got: %v", expectedNumberOfTaps, trkr.numberOfTaps)
 	}
 
-	if trkr.totalTime < startingTotalTime {
-		t.Errorf("Expected startingTotalTime (%v) to less than ending total time %v", startingTotalTime, trkr.numberOfTaps)
+	if trkr.totalDuration < startingTotalDuration {
+		t.Errorf("Expected startingTotalDuration (%v) to less than ending total time %v", startingTotalDuration, trkr.numberOfTaps)
 	}
 
 	trkr.tap(newTime)
