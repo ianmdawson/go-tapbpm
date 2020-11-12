@@ -7,7 +7,7 @@ import (
 
 func TestTapTrackerBPM(t *testing.T) {
 	testCases := []struct {
-		trackedTime      time.Time
+		lastTapTime      time.Time
 		duration         time.Duration
 		taps             int
 		expectedBpmValue float64
@@ -19,7 +19,7 @@ func TestTapTrackerBPM(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
-		trkr := tapTracker{&testCase.trackedTime, testCase.duration, testCase.taps}
+		trkr := tapTracker{&testCase.lastTapTime, testCase.duration, testCase.taps}
 
 		bpm := trkr.bpm()
 		expectedValue := float64(60)
@@ -57,8 +57,8 @@ func TestTapTrackerReset(t *testing.T) {
 	trkr := tapTracker{&now, time.Minute * 1, 1}
 	trkr.reset()
 
-	if trkr.trackedTime != nil {
-		t.Errorf("Expected trackedTime to be nil, got: %v", trkr.trackedTime)
+	if trkr.lastTapTime != nil {
+		t.Errorf("Expected lastTapTime to be nil, got: %v", trkr.lastTapTime)
 	}
 
 	if trkr.totalTime != 0 {
@@ -77,8 +77,8 @@ func TestTapTrackerTap(t *testing.T) {
 	newTime := time.Now()
 	trkr.tap(newTime)
 
-	if trkr.trackedTime.Equal(newTime) != true {
-		t.Errorf("Expected numberOfTaps to be %v, got: %v", newTime, trkr.trackedTime)
+	if trkr.lastTapTime.Equal(newTime) != true {
+		t.Errorf("Expected numberOfTaps to be %v, got: %v", newTime, trkr.lastTapTime)
 	}
 
 	expectedNumberOfTaps := 0

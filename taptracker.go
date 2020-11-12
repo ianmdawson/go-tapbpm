@@ -6,20 +6,20 @@ import (
 )
 
 type tapTracker struct {
-	trackedTime  *time.Time // TODO: rename this previous tap time?
+	lastTapTime  *time.Time
 	totalTime    time.Duration
 	numberOfTaps int
 }
 
 func (trkr *tapTracker) reset() {
-	trkr.totalTime = time.Nanosecond - 1 // TODO: is there a cleaner way to do this?
+	trkr.totalTime = time.Duration(0)
 	trkr.numberOfTaps = 0
-	trkr.trackedTime = nil
+	trkr.lastTapTime = nil
 }
 
 func (trkr *tapTracker) tap(newTime time.Time) {
-	prevTime := trkr.trackedTime
-	trkr.trackedTime = &newTime
+	prevTime := trkr.lastTapTime
+	trkr.lastTapTime = &newTime
 	if prevTime != nil {
 		trkr.totalTime = trkr.totalTime + newTime.Sub(*prevTime)
 	}
@@ -30,7 +30,7 @@ func (trkr *tapTracker) tap(newTime time.Time) {
 }
 
 func (trkr *tapTracker) bpm() float64 {
-	if trkr.trackedTime == nil || trkr.numberOfTaps == 0 {
+	if trkr.lastTapTime == nil || trkr.numberOfTaps == 0 {
 		return float64(0)
 	}
 
