@@ -1,3 +1,6 @@
+/*
+Package main implements go-tapbpm command-line tool
+*/
 package main
 
 import (
@@ -8,6 +11,7 @@ import (
 	"github.com/gosuri/uilive"
 )
 
+// inputIsQuitKey determines if the character or key combination should quit the program
 func inputIsQuitKey(char rune, key keyboard.Key) bool {
 	if string(char) == "q" || key == keyboard.KeyCtrlC || key == keyboard.KeyEsc {
 		return true
@@ -15,6 +19,7 @@ func inputIsQuitKey(char rune, key keyboard.Key) bool {
 	return false
 }
 
+// handleInput handles user input from the keyboard, records key presses, and updates the UI
 func handleInput(trkr *tapTracker, char rune, key keyboard.Key, writer *uilive.Writer) {
 	if string(char) == "r" {
 		fmt.Fprintln(writer, "Resetting counts...")
@@ -34,13 +39,16 @@ func handleInput(trkr *tapTracker, char rune, key keyboard.Key, writer *uilive.W
 	return
 }
 
+// initTerminalWriter initializes the terminal writer
 func initTerminalWriter() *uilive.Writer {
+	// TODO: return a writer that doesn't update as frequently as every millisecond to improve performance
 	writer := uilive.New()
 	// start listening for updates and render
 	writer.Start()
 	return writer
 }
 
+// main loops awaiting user input until receiving quit signal
 func main() {
 	fmt.Println("Tap BPM, tap a letter to track bpm -- 'r' to reset -- 'q' or ESC to quit")
 
