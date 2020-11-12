@@ -14,8 +14,8 @@ func TestHandleInputReset(t *testing.T) {
 	testWriter := initTestWriter()
 
 	handleInput(&testTapTracker, rune(114), 0, testWriter)
-	if testTapTracker.totalTime != 0 {
-		t.Errorf("Expected totalTime to be reset to 0, got: %v", testTapTracker.totalTime)
+	if testTapTracker.totalDuration != 0 {
+		t.Errorf("Expected totalDuration to be reset to 0, got: %v", testTapTracker.totalDuration)
 	}
 
 	testWriter.Stop()
@@ -23,13 +23,13 @@ func TestHandleInputReset(t *testing.T) {
 
 func TestHandleInputTap(t *testing.T) {
 	now := time.Now()
-	testTotalTime := time.Minute * 1
-	testTapTracker := tapTracker{&now, testTotalTime, 60}
+	testTotalDuration := time.Minute * 1
+	testTapTracker := tapTracker{&now, testTotalDuration, 60}
 	testWriter := initTestWriter()
 
 	handleInput(&testTapTracker, rune(5), 0, testWriter)
-	if testTapTracker.totalTime <= testTotalTime {
-		t.Errorf("Expected totalTime to be greater than %v, got: %v", testTotalTime, testTapTracker.totalTime)
+	if testTapTracker.totalDuration <= testTotalDuration {
+		t.Errorf("Expected totalDuration to be greater than %v, got: %v", testTotalDuration, testTapTracker.totalDuration)
 	}
 
 	testWriter.Stop()
