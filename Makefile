@@ -12,6 +12,3 @@ run:
 
 test:
 	go test -v
-
-dependencies:
-	go get ./...

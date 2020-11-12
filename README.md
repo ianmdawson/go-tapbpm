@@ -6,9 +6,11 @@ Ensure [go](https://golang.org/doc/install) is installed.
 
 Run the following to download the source code and dependencies:
 ```
-go get github.com/ianmdawson/go-tapbpm
-cd $GOPATH/src/github.com/ianmdawson/go-tapbpm
-make dependencies
+$ go get github.com/ianmdawson/go-tapbpm
+$ cd $GOPATH/src/github.com/ianmdawson/go-tapbpm
+
+# install dependencies and run tests
+$ make test
 ```
 
 Install go-tapbpm
@@ -16,7 +18,7 @@ Install go-tapbpm
 make install
 ```
 
-and you should be able to run:
+and now you should be able to run:
 ```
 go-tapbpm
 ```
