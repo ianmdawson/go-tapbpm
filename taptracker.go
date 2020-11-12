@@ -11,12 +11,14 @@ type tapTracker struct {
 	numberOfTaps  int
 }
 
+// reset all the tapTracker fields to initial values
 func (trkr *tapTracker) reset() {
 	trkr.totalDuration = time.Duration(0)
 	trkr.numberOfTaps = 0
 	trkr.lastTapTime = nil
 }
 
+// record a new tap
 func (trkr *tapTracker) tap(newTime time.Time) {
 	prevTime := trkr.lastTapTime
 	trkr.lastTapTime = &newTime
@@ -30,6 +32,7 @@ func (trkr *tapTracker) tap(newTime time.Time) {
 }
 
 // Calculate the BPM: numberOfTaps/(totalDuration in minutes)
+// returns 0 if BPM can't be calculated
 func (trkr *tapTracker) bpm() float64 {
 	if trkr.lastTapTime == nil || trkr.numberOfTaps == 0 {
 		return float64(0)
