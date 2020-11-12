@@ -30,10 +30,10 @@ func handleInput(trkr *tapTracker, char rune, key keyboard.Key, writer *uilive.W
 	t := time.Now()
 	trkr.tap(t)
 
-	if trkr.lastTapTime != nil {
-		fmt.Fprintf(writer, "bpm: %v\n", trkr.bpmString())
-	} else {
+	if trkr.numberOfTaps == 0 {
 		fmt.Fprintf(writer, "First tap...\n")
+	} else {
+		fmt.Fprintf(writer, "bpm: %v\n", trkr.bpmString())
 	}
 
 	return

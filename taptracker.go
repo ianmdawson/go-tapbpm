@@ -19,6 +19,8 @@ func (trkr *tapTracker) reset() {
 }
 
 // record a new tap
+// The very first tap initializes the start time to (lastTapTime), but
+// doesn't record a tap in numberOfTaps for ease of calculation
 func (trkr *tapTracker) tap(newTime time.Time) {
 	prevTime := trkr.lastTapTime
 	trkr.lastTapTime = &newTime
